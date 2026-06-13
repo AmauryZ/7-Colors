@@ -1,7 +1,7 @@
 Jeu inspiré de 7 Colors (https://fr.wikipedia.org/wiki/7_Colors). 
 
 Pour lancer le programme, entrer ./7colors.exe ou ./7colors_linux dans le terminal.  
-Pour la version linux du logiciel, il faut rendre le programme executable via la commande 
+Pour la version linux du logiciel, il faut rendre le programme éxecutable via la commande 
 ```sh 
 chmod +x ./7colors_linux 
 ```
