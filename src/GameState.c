@@ -37,7 +37,7 @@ Color get_map_value (GameState* state, int x, int y){
 	return state -> map[y * state -> size + x];
 }
 
-void GR4_afficher(GameState* state) { //réalise un affichage graphique dans le terminal en couleurs
+void afficher(GameState* state) { //réalise un affichage graphique dans le terminal en couleurs
     const char* colors[] = { //On définit une liste des couleurs possibles pour les cases
         "\x1b[91m", // PLAYER_1 (rouge clair)
         "\x1b[94m",  // PLAYER_2 (bleu clair)
@@ -67,7 +67,7 @@ void GR4_afficher(GameState* state) { //réalise un affichage graphique dans le 
     }
 }
 
-int GR4_entree(int joueur) { //fonction permettant d'entrer des coups. B retourne 1 par exemple
+int entree(int joueur) { //fonction permettant d'entrer des coups. B retourne 1 par exemple
     char x;
     int val = -1; // def de notre condition de sortie de la boucle
     while (val == -1) {
@@ -85,7 +85,7 @@ int GR4_entree(int joueur) { //fonction permettant d'entrer des coups. B retourn
 }
 
 
-void GR4_tour_basique(GameState* state, int joueur, int x) { //fonction qui met à jour le monde après le coup d'un joueur
+void tour_basique(GameState* state, int joueur, int x) { //fonction qui met à jour le monde après le coup d'un joueur
     int size = state->size;//on récup size
     int dx[4] = {1, -1, 0, 0};//On crée des variables dx et dy pour regarder les cases autour
     int dy[4] = {0, 0, 1, -1};
@@ -115,7 +115,7 @@ void GR4_tour_basique(GameState* state, int joueur, int x) { //fonction qui met 
     }
 }
 
-void GR4_tour(GameState* state, int joueur, int x) { //fonction GR4_tour_basique améliorée
+void tour(GameState* state, int joueur, int x) { //fonction tour_basique améliorée
 
     typedef struct {//on définit une structure position prenant les x,y
         int x;
@@ -170,7 +170,7 @@ void GR4_tour(GameState* state, int joueur, int x) { //fonction GR4_tour_basique
     free(to_change);//on libere la liste
 }
 
-int GR4_compter_victoire(GameState* state, int joueur){//Fonction qui dit si le joueur en train de jouer a gagné. On entre la map et le joueur en train de jouer
+int compter_victoire(GameState* state, int joueur){//Fonction qui dit si le joueur en train de jouer a gagné. On entre la map et le joueur en train de jouer
 
     int count=0;
     int size=state->size;
@@ -185,7 +185,7 @@ int GR4_compter_victoire(GameState* state, int joueur){//Fonction qui dit si le 
     return 0;
 } 
 
-int GR4_choisir_mode() {
+int choisir_mode() {
 
     char mode[50]; //on def notre variable mode de jeu
 
@@ -213,7 +213,7 @@ int GR4_choisir_mode() {
     }
 }
 
-int GR4_choisir_bot() {//si le mode versus est selectionné. Meme principe que choisir_mode()
+int choisir_bot() {//si le mode versus est selectionné. Meme principe que choisir_mode()
 
     char mode[50];
 
@@ -235,11 +235,11 @@ int GR4_choisir_bot() {//si le mode versus est selectionné. Meme principe que c
     }
 }
 
-int GR4_randy(GameState* state, int joueur){
+int randy(GameState* state, int joueur){
     return (rand() % 7);//On retourne un nombre random entre 0 et 6
 }
 
-int GR4_randy_jr(GameState* state, int joueur) {
+int randy_jr(GameState* state, int joueur) {
     int size = state->size;//on récup size
     int L[7];//On crée une liste de taille 7 dont les indices correspondent au valeurs possibles des cases 
     int n = 0;//nombre d'éléments dans L
@@ -301,7 +301,7 @@ int GR4_randy_jr(GameState* state, int joueur) {
     return L[rand()%n]-3;//on renvoit une VA parmis L (comprise entre 0 et 6)
 }
 
-int GR4_Bouboule(GameState* state, int joueur)
+int Bouboule(GameState* state, int joueur)
 {
     int size = state->size;
     int bestColor = 0; 
@@ -388,7 +388,7 @@ int GR4_Bouboule(GameState* state, int joueur)
     return (bestColor);//On renvoie la couleur retenue. Si glouton ne peut plus faire progresser son territoire, il va jouer la lettre A (couleur rouge) par défaut
 }
 
-int GR4_Hegemonique(GameState* state, int joueur)
+int Hegemonique(GameState* state, int joueur)
 {
     int size = state->size;
     int bestColor = 0;
@@ -494,7 +494,7 @@ int GR4_Hegemonique(GameState* state, int joueur)
     return bestColor; //si maxFront vaut 0, l'IA va jouer la lettre A (couleur rouge) par défaut
 }
 
-int GR4_Boyard(GameState* state, int joueur)
+int Boyard(GameState* state, int joueur)
 {
     int size = state->size; //On récup les variables dont on a besoin et on crée celles qu'on utilisera
     int bestColor = 0;
@@ -618,7 +618,7 @@ int GR4_Boyard(GameState* state, int joueur)
     return bestColor; //joue la lettre A (couleur rouge) s'il ne peut plus faire progresser son territoire 
 }
 
-int GR4_Hegemonique_Jr(GameState* state, int joueur)
+int Hegemonique_Jr(GameState* state, int joueur)
 {
     int size = state->size;
     int bestColor = 0;
@@ -726,47 +726,47 @@ int GR4_Hegemonique_Jr(GameState* state, int joueur)
     if(maxFront==0) //s'il n'est plus possible de faire progresser son territoire, on joue comme un glouton.
                     //S'il n'est encore pas possible de faire progresser son territoire avec glouton, l'IA va jouer la lettre A (couleur rouge) par défaut
     {
-        bestColor=GR4_Bouboule(state,joueur); 
+        bestColor=Bouboule(state,joueur); 
     }
 
     return bestColor;
 }
 
 
-int GR4_jouer_bot(int bot, GameState* state, int joueur) {//pour faire jouer les bots si le mode versus  est selectionné
+int jouer_bot(int bot, GameState* state, int joueur) {//pour faire jouer les bots si le mode versus  est selectionné
 
     switch(bot) {
 
-        case 0: return GR4_randy(state,joueur);
-        case 1: return GR4_randy_jr(state,joueur);
-        case 2: return GR4_Bouboule(state,joueur);
-        case 3: return GR4_Hegemonique(state,joueur);
-        case 4: return GR4_Boyard(state,joueur);
-        case 5: return GR4_Hegemonique_Jr(state,joueur);
+        case 0: return randy(state,joueur);
+        case 1: return randy_jr(state,joueur);
+        case 2: return Bouboule(state,joueur);
+        case 3: return Hegemonique(state,joueur);
+        case 4: return Boyard(state,joueur);
+        case 5: return Hegemonique_Jr(state,joueur);
 
     }
 
     return 0;
 }
 
-int GR4_jouer_coup(int mode, int joueur, int bot1, int bot2, GameState* state)
+int jouer_coup(int mode, int joueur, int bot1, int bot2, GameState* state)
 {
     int coup;
     switch(mode){
 
             case 2: //mode JcJ
 
-                coup=GR4_entree(joueur);
+                coup=entree(joueur);
                 break;
 
             case 3: //mode RANDY
 
                 if(joueur==PLAYER_1)
-                    coup=GR4_entree(joueur);
+                    coup=entree(joueur);
                 
                 else
                 {
-                    coup=GR4_randy(state,joueur);
+                    coup=randy(state,joueur);
                     printf("\nCoup joue: %c\n","ABCDEFG"[coup]);
                 }
 
@@ -775,9 +775,9 @@ int GR4_jouer_coup(int mode, int joueur, int bot1, int bot2, GameState* state)
             case 4: //mode RANDY_JR
 
                 if(joueur==PLAYER_1)
-                    coup=GR4_entree(joueur);
+                    coup=entree(joueur);
                 else{
-                    coup=GR4_randy_jr(state,joueur);
+                    coup=randy_jr(state,joueur);
                     printf("\nCoup joue: %c\n","ABCDEFG"[coup]);
                 }
 
@@ -786,9 +786,9 @@ int GR4_jouer_coup(int mode, int joueur, int bot1, int bot2, GameState* state)
             case 5: //mode BOUBOULE
 
                 if(joueur==PLAYER_1)
-                    coup=GR4_entree(joueur);
+                    coup=entree(joueur);
                 else{
-                    coup=GR4_Bouboule(state,joueur);
+                    coup=Bouboule(state,joueur);
                     printf("\nCoup joue: %c\n","ABCDEFG"[coup]);
                 }
 
@@ -797,9 +797,9 @@ int GR4_jouer_coup(int mode, int joueur, int bot1, int bot2, GameState* state)
             case 6: //mode Hegemonique
 
                 if(joueur==PLAYER_1)
-                    coup=GR4_entree(joueur);
+                    coup=entree(joueur);
                 else{
-                    coup=GR4_Hegemonique(state,joueur);
+                    coup=Hegemonique(state,joueur);
                     printf("\nCoup joue: %c\n","ABCDEFG"[coup]);
                 }
 
@@ -808,9 +808,9 @@ int GR4_jouer_coup(int mode, int joueur, int bot1, int bot2, GameState* state)
             case 7: //mode BOYARD
 
                 if(joueur==PLAYER_1)
-                    coup=GR4_entree(joueur);
+                    coup=entree(joueur);
                 else{
-                    coup=GR4_Boyard(state,joueur);
+                    coup=Boyard(state,joueur);
                     printf("\nCoup joue: %c\n","ABCDEFG"[coup]);
                 }
 
@@ -819,9 +819,9 @@ int GR4_jouer_coup(int mode, int joueur, int bot1, int bot2, GameState* state)
             case 8: //mode Hegemonique_Jr
 
                 if(joueur==PLAYER_1)
-                    coup=GR4_entree(joueur);
+                    coup=entree(joueur);
                 else{
-                    coup=GR4_Hegemonique_Jr(state,joueur);
+                    coup=Hegemonique_Jr(state,joueur);
                     printf("\nCoup joue: %c\n","ABCDEFG"[coup]);
                 }
 
@@ -831,12 +831,12 @@ int GR4_jouer_coup(int mode, int joueur, int bot1, int bot2, GameState* state)
 
                 if(joueur==PLAYER_1)
                 {
-                    coup=GR4_jouer_bot(bot1,state,joueur);
+                    coup=jouer_bot(bot1,state,joueur);
                     printf("\nCoup joue: %c\n","ABCDEFG"[coup]);
                 }
                 else
                 {
-                    coup=GR4_jouer_bot(bot2,state,joueur);
+                    coup=jouer_bot(bot2,state,joueur);
                     printf("\nCoup joue: %c\n","ABCDEFG"[coup]);
                 }
                 break;
@@ -845,7 +845,7 @@ int GR4_jouer_coup(int mode, int joueur, int bot1, int bot2, GameState* state)
     return coup;
 }
 
-int GR4_simu_coup_IA (GameState* state, int size, char* argv[])
+int simu_coup_IA (GameState* state, int size, char* argv[])
 {
 
     const char* colors[] = { //On définit une liste des couleurs possibles pour les cases
@@ -896,20 +896,20 @@ int GR4_simu_coup_IA (GameState* state, int size, char* argv[])
         return -1;
     }
 
-    GR4_afficher(state);
+    afficher(state);
 
     if(strcmp(nom_bot,"Randy")==0)
-        return GR4_randy(state,numero_joueur+3);
+        return randy(state,numero_joueur+3);
     else if(strcmp(nom_bot,"Randy_Jr")==0) 
-        return GR4_randy_jr(state,numero_joueur+3);
+        return randy_jr(state,numero_joueur+3);
     else if(strcmp(nom_bot,"Bouboule")==0)
-        return GR4_Bouboule(state,numero_joueur+3);
+        return Bouboule(state,numero_joueur+3);
     else if(strcmp(nom_bot,"Hegemonique")==0) 
-        return GR4_Hegemonique(state,numero_joueur+3);
+        return Hegemonique(state,numero_joueur+3);
     else if(strcmp(nom_bot,"Boyard")==0) 
-        return GR4_Boyard(state,numero_joueur+3);
+        return Boyard(state,numero_joueur+3);
     else if(strcmp(nom_bot,"Hegemonique_Jr")==0) 
-        return GR4_Hegemonique_Jr(state,numero_joueur+3);
+        return Hegemonique_Jr(state,numero_joueur+3);
 
     else 
     {
@@ -918,9 +918,9 @@ int GR4_simu_coup_IA (GameState* state, int size, char* argv[])
     }
 }
 
-int GR4_jouer_jeu(GameState* state)
+int jouer_jeu(GameState* state)
 {
-    int mode=GR4_choisir_mode();
+    int mode=choisir_mode();
 
     int bot1=-1;
     int bot2=-1;
@@ -928,10 +928,10 @@ int GR4_jouer_jeu(GameState* state)
     if(mode==1||mode==0) // modes VERSUS ou SUPER_VERSUS
     {
         printf("\nChoisissez le joueur 1\n");
-        bot1=GR4_choisir_bot();
+        bot1=choisir_bot();
 
         printf("\nChoisissez le joueur 2\n");
-        bot2=GR4_choisir_bot();
+        bot2=choisir_bot();
     }
 
 
@@ -950,18 +950,18 @@ int GR4_jouer_jeu(GameState* state)
     while(victory==0 && partie <= supround) //tant qu'il n'y a pas de victoire ou qu'on n'a pas joué toutes les parties du SUPERVERSUS
     {
         
-        GR4_afficher(state);
+        afficher(state);
 
         joueur = (turn%2==0) ? PLAYER_1 : PLAYER_2; //PLAYER_1 commence toujours en premier
         
-        coup=GR4_jouer_coup(mode, joueur, bot1, bot2, state);
+        coup=jouer_coup(mode, joueur, bot1, bot2, state);
         
-        GR4_tour(state,joueur,coup);
+        tour(state,joueur,coup);
         
         if (mode==1) // si MODE_SUPERVERSUS
         {
             printf("\npartie n %d\n", (partie));
-            if (GR4_compter_victoire(state, joueur))
+            if (compter_victoire(state, joueur))
             {
                 if (joueur==PLAYER_1)
                 {
@@ -982,7 +982,7 @@ int GR4_jouer_jeu(GameState* state)
         }
         else
         {
-            victory=GR4_compter_victoire(state, joueur);
+            victory=compter_victoire(state, joueur);
         }
         
         turn++;
@@ -1059,7 +1059,7 @@ int main(int argc, char* argv[]) {
 
     if (argc > 2)
     {
-        int simu=GR4_simu_coup_IA(&state, size, argv);
+        int simu=simu_coup_IA(&state, size, argv);
         if (simu==-1)
             return -1;
         printf("Coup joue : %d (lettre %c)\n", simu, "ABCDEFG"[simu]);
@@ -1071,5 +1071,5 @@ int main(int argc, char* argv[]) {
         fill_map(&state);
     }
 
-    return GR4_jouer_jeu(&state);    
+    return jouer_jeu(&state);    
 }
